@@ -5,6 +5,7 @@
    <title>Shopping Cart</title>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
    <link href="style.css" rel="stylesheet">
@@ -75,7 +76,7 @@
                   </div>
                </div>
                <div class="col-md-12 pt-4 pb-4">
-                  <button type="button" class="btn btn-success check-out">Check Out</button>
+                  <button id="checkout" type="button" class="btn btn-success check-out">Check Out</button>
                </div>
             </div>
          </div>
@@ -84,30 +85,28 @@
 
    <script>
       const phonePrice = parseFloat(document.getElementById("totalPricePhone").innerText); // 1219, price of one unit
-      const casePrice = parseFloat(document.getElementById("totalPriceCase").innerText); // 59, price of one unit
+      const casePrice = parseFloat(document.getElementById("totalPriceCase").innerText); // 59, price of one unit    
       
       clickPlus("plusPhone", "countPhone", "totalPricePhone", phonePrice);
-      clickMinus("plusPhone", "countPhone", "totalPricePhone", phonePrice);
+      clickMinus("minusPhone", "countPhone", "totalPricePhone", phonePrice);
       clickRemove("removePhone", "totalPricePhone");
 
       clickPlus("plusCase", "countCase", "totalPriceCase", casePrice);
-      clickMinus("plusCase", "countCase", "totalPriceCase", casePrice);
+      clickMinus("minusCase", "countCase", "totalPriceCase", casePrice);
       clickRemove("removeCase", "totalPriceCase");
       
       function clickPlus(buttonId, countInputId, totalPriceId, unitPrice)
       {
-         document.getElementById(buttonId).addEventListener("click",function(event){
+         document.getElementById(buttonId).addEventListener("click",function(){
             var countItem = parseInt(document.getElementById(countInputId).value);
-            // console.log(countItem);
             countItem++;
             document.getElementById(countInputId).value = countItem;
-            // console.log(document.getElementById(countInputId).value);
 
             updatePrice(totalPriceId, unitPrice);
             updatePrice("subtotal", unitPrice, true); // comma separated
             updatePrice("total", unitPrice, true);  // comma separated
 
-         })
+         });
       }
       
       // document.getElementById("plusPhone").addEventListener("click",function(event){
@@ -123,7 +122,7 @@
 
       function clickMinus(buttonId, countInputId, totalPriceId, unitPrice)
       {
-         document.getElementById(buttonId).addEventListener("click",function(event){
+         document.getElementById(buttonId).addEventListener("click",function(){
             var countItem = parseInt(document.getElementById(countInputId).value);
             if(countItem > 1){
                countItem--;
@@ -134,7 +133,7 @@
                updatePrice("total", -unitPrice, true);  // comma separated
             }
             
-         })
+         });
       }   
 
       // document.getElementById("minusPhone").addEventListener("click",function(event){
@@ -152,11 +151,16 @@
 
       function clickRemove(removeImgId, totalPriceId)
       {
-         document.getElementById(removeImgId).addEventListener("click",function(event){
+         document.getElementById(removeImgId).addEventListener("click",function(){
             var totalPriceItem = parseFloat(document.getElementById(totalPriceId).innerText);
             updatePrice("subtotal", -totalPriceItem, true); // comma separated
             updatePrice("total", -totalPriceItem, true);  // comma separated
-         })
+
+            var total = parseFloat(document.getElementById("total").innerText);
+            if(total == 0){
+               document.getElementById("checkout").disabled = true;
+            } 
+         });
       }
 
       // document.getElementById("removePhone").addEventListener("click",function(event){
